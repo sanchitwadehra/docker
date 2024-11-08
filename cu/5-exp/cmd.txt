@@ -1,0 +1,69 @@
+Hub/docker/cu/5-exp (main)
+$ docker volume create myvolume
+myvolume
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/5-exp (main)
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     myvolume   
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/5-exp (main)
+$ docker run -d -v myvolume:/usr/share/nginx/html -p 80:80 --name mynginx nginx
+Unable to find image 'nginx:latest' locally
+latest: Pulling from library/nginx
+a480a496ba95: Pull complete
+f3ace1b8ce45: Pull complete
+11d6fdd0e8a7: Pull complete
+f1091da6fd5c: Pull complete
+40eea07b53d8: Pull complete
+6476794e50f4: Pull complete
+70850b3ec6b2: Pull complete
+Digest: sha256:28402db69fec7c17e179ea87882667f1e054391138f77ffaf0c3eb388efc3ffb
+Status: Downloaded newer image for nginx:latest
+0f5fcc5d00e8f2a9318f86ed20eedae7879ec21d80b90fae9b4a5115c0b0b9e1
+
+
+
+
+THEN GO TO ANOTHER TERMINAL 
+
+
+C:\Users\sanch>docker exec -it mynginx /bin/bash
+root@0f5fcc5d00e8:/# echo "Hello from myvolume!" > /usr/share/nginx/html/index.html
+root@0f5fcc5d00e8:/# exit
+exit
+
+//AFTER THIS YOU CAN GO TO http://localhost and see the reponse from the nginx server serving from the volume
+
+
+
+
+
+
+THEN RUN THIS ANYWHERE
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/5-exp (main)
+$ docker volume inspect myvolume
+[
+    {
+        "CreatedAt": "2024-11-08T19:14:05Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/myvolume/_data",
+        "Name": "myvolume",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/5-exp (main)   
+$ docker stop mynginx
+mynginx
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/5-exp (main)   
+$ docker rm mynginx
+mynginx
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/5-exp (main)   
+$ docker volume rm myvolume
+myvolume
