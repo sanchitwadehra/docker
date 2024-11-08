@@ -1,0 +1,77 @@
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/2-exp/welcome-to-docker-main (main)
+$ ls
+Dockerfile      package.json       public/    src/
+MAINTAINERS.md  package-lock.json  README.md      
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/2-exp/welcome-to-docker-main (main)
+$ docker build -t sample .
+[+] Building 138.2s (12/12) FINISHED              docker:desktop-linux 
+ => [internal] load build definition from Dockerfile              0.1s 
+ => => transferring dockerfile: 647B                              0.0s 
+ => [internal] load metadata for docker.io/library/node:18-alpin  3.8s 
+ => [auth] library/node:pull token for registry-1.docker.io       0.0s 
+ => [internal] load .dockerignore                                 0.1s 
+ => => transferring context: 52B                                  0.0s 
+ => [1/6] FROM docker.io/library/node:18-alpine@sha256:02376a26  10.1s 
+ => => resolve docker.io/library/node:18-alpine@sha256:02376a266  0.0s 
+ => => sha256:02376a266c84acbf45bd19440e08e48b1c 7.67kB / 7.67kB  0.0s 
+ => => sha256:ea8e360a721d870337fe899c70ea7def62 1.72kB / 1.72kB  0.0s 
+ => => sha256:f48cc58268524517dc484f884b142fad14 6.36kB / 6.36kB  0.0s 
+ => => sha256:3696426c5aa28a9e9d46b6194f46c030 39.84MB / 39.84MB  3.6s 
+ => => sha256:cdccf44a82db2a9559b2c200f8cdbdb0df 1.38MB / 1.38MB  0.8s 
+ => => sha256:43c4264eed91be63b206e17d93e75256a6 3.62MB / 3.62MB  2.2s 
+ => => sha256:21f39b9ddd19acb73b7cbee0e5755029042719 447B / 447B  1.3s 
+ => => extracting sha256:43c4264eed91be63b206e17d93e75256a609707  0.4s 
+ => => extracting sha256:3696426c5aa28a9e9d46b6194f46c030c7dce77  5.3s 
+ => => extracting sha256:cdccf44a82db2a9559b2c200f8cdbdb0df43925  0.2s 
+ => => extracting sha256:21f39b9ddd19acb73b7cbee0e5755029042719f  0.0s 
+ => [internal] load build context                                 0.1s 
+ => => transferring context: 691.39kB                             0.1s 
+ => [2/6] WORKDIR /app                                            0.4s 
+ => [3/6] COPY package*.json ./                                   0.1s 
+ => [4/6] COPY ./src ./src                                        0.1s 
+ => [5/6] COPY ./public ./public                                  0.1s 
+ => [6/6] RUN npm install     && npm install -g serve     && n  120.9s 
+ => exporting to image                                            2.2s 
+ => => exporting layers                                           2.2s 
+ => => writing image sha256:9890ef508233b644fbd1018a59c40ee37a66  0.0s 
+ => => naming to docker.io/library/sample                         0.0s 
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/cx3aghg263ea2eh5jbog9msuf
+
+What's next:
+    View a summary of image vulnerabilities and recommendations → docker scout quickview
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/2-exp/welcome-to-docker-main (main)
+$ docker run -p 3000:3000 sample
+ INFO  Accepting connections at http://localhost:3000
+ HTTP  11/8/2024 5:02:37 PM 172.17.0.1 GET /
+ HTTP  11/8/2024 5:02:37 PM 172.17.0.1 Returned 200 in 43 ms
+ HTTP  11/8/2024 5:02:37 PM 172.17.0.1 GET /static/js/main.c9e951e4.js
+ HTTP  11/8/2024 5:02:38 PM 172.17.0.1 GET /static/css/main.27312bf9.css
+ HTTP  11/8/2024 5:02:37 PM 172.17.0.1 Returned 200 in 22 ms
+ HTTP  11/8/2024 5:02:38 PM 172.17.0.1 Returned 200 in 14 ms
+ HTTP  11/8/2024 5:02:38 PM 172.17.0.1 GET /favicon.ico
+ HTTP  11/8/2024 5:02:38 PM 172.17.0.1 Returned 200 in 3 ms
+
+ INFO  Gracefully shutting down. Please wait...
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/2-exp/welcome-to-docker-main (main)
+$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+sample       latest    9890ef508233   2 minutes ago   233MB
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/2-exp/welcome-to-docker-main (main)
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS                     PORTS     NAMES
+51eb931aa810   sample    "docker-entrypoint.s…"   2 minutes ago   Exited (0) 2 minutes ago             eloquent_northcutt
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/2-exp/welcome-to-docker-main (main)
+$ docker rm eloquent_northcutt
+eloquent_northcutt
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/2-exp/welcome-to-docker-main (main)
+$ docker rmi sample
+Untagged: sample:latest
+Deleted: sha256:9890ef508233b644fbd1018a59c40ee37a663d4e8199f097df640a98ef75c6b0
