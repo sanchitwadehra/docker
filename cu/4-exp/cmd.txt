@@ -1,0 +1,116 @@
+1. Pulling images
+
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/4-exp (main)
+$ docker pull ubuntu:latest
+latest: Pulling from library/ubuntu
+ff65ddf9395b: Pull complete
+Digest: sha256:99c35190e22d294cdace2783ac55effc69d32896daaa265f0bbedbcde4fbe3e5
+Status: Downloaded newer image for ubuntu:latest
+docker.io/library/ubuntu:latest
+
+What's next:
+    View a summary of image vulnerabilities and recommendations → docker scout quickview ubuntu:latest
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/4-exp (main)
+$ docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE  
+ubuntu       latest    59ab366372d5   4 weeks ago   78.1MB
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/4-exp (main)
+$
+
+
+
+
+2. Running containers
+
+done very well in 3rd Experiment
+
+
+
+
+
+3. Exploring Logs & Processes
+
+A. Logs
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/4-exp (main)   
+$ docker run ubuntu ls
+bin  
+boot 
+dev  
+etc  
+home 
+lib  
+lib64
+media
+mnt  
+opt  
+proc 
+root 
+run  
+sbin 
+srv  
+sys  
+tmp  
+usr  
+var  
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/4-exp (main)
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED         STATUS
+     PORTS     NAMES
+63f90e7f0932   ubuntu    "ls"      8 seconds ago   Exited (0) 7 seconds ago             great_lovelace
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/4-exp (main)
+$ docker logs great_lovelace
+bin
+boot
+dev
+etc
+home
+lib
+lib64
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+
+B. Processes
+
+// KEEP THE CONTAINER RUNNING IN A DIFFERENT TERMINAL
+
+C:\Users\sanch>docker run -it ubuntu /bin/bash
+root@060b6a6432e2:/# ^C
+root@060b6a6432e2:/# ^C
+root@060b6a6432e2:/# ^C
+root@060b6a6432e2:/# ^C
+root@060b6a6432e2:/# ^C
+root@060b6a6432e2:/#
+
+// OPEN ANOTHER TERMINAL INSTANCE 
+C:\Users\sanch>docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
+060b6a6432e2   ubuntu    "/bin/bash"   13 seconds ago   Up 12 seconds             intelligent_visvesvaraya
+
+C:\Users\sanch>docker exec intelligent_visvesvaraya ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0   4588  3872 pts/0    Ss+  17:44   0:00 /bin/bash
+root         9  100  0.0   7888  4016 ?        Rs   17:45   0:00 ps aux
+
+
+
+
+
+4. Stopping and Removing Containers
+
+Already done in previous experiments
