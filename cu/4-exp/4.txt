@@ -1,0 +1,61 @@
+Experiment 1.4: Container Creation and Execution:
+• Pull a Docker image from Docker Hub.
+• Run a container from the pulled image.
+• Explore container logs and check the running processes inside the
+container.
+• Stop and remove the container.
+Outcomes of the Experiment:
+• To learn creation and execution of docker containers.
+• To learn launching of isolated instances of services.
+• Learn to explore container logs and resource management.
+Procedure:
+Pull a Docker Image from Docker Hub:
+Open a command prompt or PowerShell window.
+Run the following command to pull a Docker image from Docker Hub:
+docker pull <image-name>
+Replace <image-name> with the name of the Docker image you want to pull. For example, to pull the
+official nginx image, use docker pull nginx.
+Run a Container from the Pulled Image:
+Use the following command to run a container from the pulled image:
+docker run <image-name>
+Replace <image-name> with the name of the Docker image you pulled in the previous step.
+You can add additional options to the docker run command, such as port mapping and volume mounting,
+as per your requirements.
+Explore Container Logs and Check Running Processes:
+To explore the logs of a running container, open a new command prompt or PowerShell window.
+Use the following command to view the logs of a specific container:
+docker logs <container-name>
+Replace <container-name> with the name or ID of the running container.
+The logs will display the output and activity happening inside the container.
+CO2 Understand the Docker Container and various basic commands on images
+CO4 Implement Docker Communication, Dockerizing applications and Services
+12
+To check the running processes inside a container, use the following command:
+docker exec -it <container-name> sh
+This command opens a shell session inside the container, allowing you to interact with it.
+You can replace sh with the appropriate shell (e.g., bash) if the container has a different default shell.
+Stop and Remove the Container:
+To stop a running container, open a new command prompt or PowerShell window.
+Use the following command to stop a specific container:
+docker stop <container-name>
+Replace <container-name> with the name or ID of the running container.
+The container will stop gracefully and exit.
+To remove a stopped container, use the following command:
+docker rm <container-name>
+Replace <container-name> with the name or ID of the stopped container.
+The container will be removed from your system.
+Remember to replace <image-name> and <container-name> with the appropriate names or IDs based on
+your scenario. You can explore different Docker images available on Docker Hub and experiment with
+various containers using these commands.
+Website link/ Video Resources
+https://www.youtube.com/watch?v=CcxbHkqzJuI
+Other Resource materials or Web Links.
+• Moby Project: https://mobyproject.org
+• Runc: https://github.com/opencontainers/runc
+• Containerd: https://containerd.io
+Questions to be asked for Viva Voce of Experiment 1.4:
+Q1. How can you run multiple containers using a single service?
+Q2. What are a different kind of volume mount types available in Docker?
+Q3. How to configure the default logging driver under Docker?
+Q4. What are Docker Namespaces?
+Q5. How do I run multiple copies of Compose file on the same host?

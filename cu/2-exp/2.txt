@@ -1,0 +1,99 @@
+EXPERIMENT 2
+Experiment 1.2: To create and manage containers using pre-built and custom images.
+CO1 Create a page using HTML and CSS and implement validation using Java Script
+CO2 Understand the Docker Container and various basic commands on images
+Outcomes of the Experiment:
+• Learn the concept of Containerization and relationship between images and containers.
+• Learn to pull pre-built images, create containers from those images, manage running containers,
+and remove containers and images when necessary.
+Lean the workflow of software development in Docker Desktop.
+Procedure:
+Run the Docker Desktop installer and follow the on-screen instructions to complete the installation.
+Launch Docker Desktop:
+After installation, launch Docker Desktop from the Start menu or desktop shortcut.
+Verify Docker installation:
+Open a command prompt or PowerShell window.
+Run the command docker version to verify that Docker is installed correctly. You should see information
+about the Docker version and API version.
+Pull a pre-built image from Docker Hub:
+Docker Hub is a public repository of Docker images. You can pull pre-built images from Docker Hub and
+use them to create containers.
+Open a command prompt or PowerShell window.
+Run the command docker pull IMAGE_NAME:TAG to pull a specific image from Docker Hub. Replace
+IMAGE_NAME with the name of the image you want to pull and TAG with the specific version or tag of
+the image.
+For example, to pull the latest version of the Ubuntu image, you can run docker pull ubuntu:latest.
+List the pulled images:
+Run the command docker images to list all the Docker images available on your local system. You should
+see the image you pulled in the previous step.
+Create a container from a pre-built image:
+6
+Run the command docker run --name CONTAINER_NAME IMAGE_NAME:TAG to create a container
+from a pre-built image. Replace CONTAINER_NAME with a name for your container and
+IMAGE_NAME:TAG with the name and tag of the image you want to use.
+For example, to create a container named "mycontainer" from the Ubuntu image, you can run docker run
+--name mycontainer ubuntu:latest.
+By default, the container will run in the foreground, and you will see the container's output in the
+terminal.
+Manage running containers:
+To see a list of running containers, run the command docker ps. This will show the container ID, name,
+image used, and status of the running containers.
+To stop a running container, use the command docker stop CONTAINER_ID or docker stop
+CONTAINER_NAME. Replace CONTAINER_ID or CONTAINER_NAME with the actual ID or name
+of the container.
+To start a stopped container, use the command docker start CONTAINER_ID or docker start
+CONTAINER_NAME.
+Build a custom image:
+Docker allows you to build your custom images based on a Dockerfile, which contains instructions for
+building the image.
+Create a new directory and navigate to it in the command prompt or PowerShell.
+Create a file named Dockerfile in the directory and add the necessary instructions to build your custom
+image.
+For example, you can use the following Dockerfile to build a custom image based on the Ubuntu image:
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y <package-name>
+CMD ["<command-to-run>"]
+Replace <package-name> with the name of the package you want to install and <command-to-run> with
+the command you want the container to execute when it starts.
+Save the Dockerfile.
+Build the custom image:
+Run the command docker build -t IMAGE_NAME:TAG . to build the custom image. Replace
+IMAGE_NAME:TAG with the desired name and tag for your image.
+The . at the end of the command specifies that the build context is the current directory where the
+Dockerfile is located.
+List the built image:
+Run the command docker images to verify that your custom image has been built successfully.
+Create a container from the custom image:
+Use the same command as in step 6 to create a container from your custom image: docker run --name
+CONTAINER_NAME IMAGE_NAME:TAG.
+7
+Replace CONTAINER_NAME with a name for your container and IMAGE_NAME:TAG with the name
+and tag of your custom image.
+Interact with the container:
+Once the container is running, you can interact with it by running commands inside it.
+To execute a command inside the container, use the command docker exec CONTAINER_NAME
+COMMAND. Replace CONTAINER_NAME with the name of your container and COMMAND with the
+command you want to execute.
+For example, to run a shell inside the container, you can run docker exec -it CONTAINER_NAME
+/bin/bash.
+Remove containers and images:
+To remove a container, use the command docker rm CONTAINER_ID or docker rm
+CONTAINER_NAME.
+To remove an image, use the command docker rmi IMAGE_NAME:TAG.
+Note that you cannot remove a running container. You need to stop it first using the docker stop
+command.
+These are the basic steps to create and manage containers using pre-built and custom images in Docker
+Desktop on Windows.
+Relevant Demonstrative Video LINK.
+https://www.youtube.com/watch?v=PsWeSg38XFY
+Other Resource materials or Web Links.
+• Docker Extended Support Announcement: https://www.docker.com/blog/extending-support-cycledocker-community-edition/
+Next up, we discussed the following open source projects:
+• Moby Project: https://mobyproject.org
+• Runc: https://github.com/opencontainers/runc
+Questions to be asked for Viva Voce of Experiment 1.2:
+Q1. What is Docker?
+Q2.Illustrate some of the advantages of using Docker container?
+Q3. Enlist the important features of Docker?
+Q4. What do you understand by Docker image?
+Q5. What is Docker Engine?
