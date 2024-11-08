@@ -1,0 +1,206 @@
+EXPERIMENT 10
+Experiment 3.3: Deploy multiple pod and multiple communication between pod and
+Kubernetes.
+CO5 Explore the Kubernetes and Container Orchestration with the concept of microservices
+Objective of the Experiment:
+• To understand the concept of immutability in Kubernetes by deploying a simple application
+and updating it with new changes using immutable principles.
+To understand the deployment of pod and communication between pod and Kubernetes.
+Procedure:
+1. Communication between pod and Kubernetes
+Step 1: Create YAML Manifests for the Pods
+Create two YAML manifest files, one for each pod. For example, create "pod-a.yaml" and "podb.yaml" with the following content:
+pod-a.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+ name: pod-a
+spec:
+ containers:
+ - name: container-a
+ image: nginx
+ ports:
+ - containerPort: 80
+39
+pod-b.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+ name: pod-b
+spec:
+ containers:
+ - name: container-b
+ image: nginx
+ ports:
+ - containerPort: 80
+Step 2: Apply the YAML Manifests to Create Pods
+Apply the YAML manifest files to create the pods:
+kubectl apply -f pod-a.yaml
+kubectl apply -f pod-b.yaml
+Step 3: Check the Status of Pods
+Check the status of the pods to ensure they are running:
+kubectl get pods
+Step 4: Communication Between Pods
+Now, let's enable communication between these two pods. We can do this by creating a Kubernetes
+Service for each pod.
+service-a.yaml
+40
+apiVersion: v1
+kind: Service
+metadata:
+ name: service
+-
+a
+spec:
+ selector:
+ app: pod
+-
+a
+ ports:
+
+- protocol: TCP
+ port: 80
+ targetPort: 80
+service
+-b.yaml
+apiVersion: v1
+kind: Service
+metadata:
+ name: service
+-
+b
+spec:
+ selector:
+ app: pod
+-
+b
+ ports:
+
+- protocol: TCP
+ port: 80
+ targetPort: 80
+Apply the service YAML files:
+kubectl apply
+-f service
+-a.yaml
+41
+kubectl apply -f service-b.yaml
+Step 5: Verify Communication
+Now that the services are created, Kubernetes will automatically handle the communication
+between the pods through these services. The services will act as load balancers, distributing
+incoming requests to the respective pods.
+You can test the communication by using the following commands:
+# Get the ClusterIP for Service A
+kubectl get svc service-a
+# Use the ClusterIP to access Service A from within the cluster
+curl <ClusterIP-for-Service-A>
+# Get the ClusterIP for Service B
+kubectl get svc service-b
+# Use the ClusterIP to access Service B from within the cluster
+curl <ClusterIP-for-Service-B>
+The above steps demonstrate how to deploy multiple pods and enable communication between
+them in Kubernetes using services. Kubernetes will handle the load balancing and routing of
+requests to the appropriate pods associated with the services.
+2. Immutability Concept
+Kubernetes cluster set up (e.g., Minikube or a cloud-based Kubernetes service).
+kubectl installed and configured to interact with the Kubernetes cluster.
+Step 1: Deploy the Initial Application
+Create a simple YAML manifest file for deploying a sample application. Let's call it "appdeployment.yaml".
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: my-app
+spec:
+42
+ replicas: 2
+ selector:
+ matchLabels:
+ app: my-app
+ template:
+ metadata:
+ labels:
+ app: my-app
+ spec:
+ containers:
+ - name: my-app-container
+ image: nginx:latest
+ ports:
+ - containerPort: 80
+Apply the YAML manifest to deploy the initial application.
+kubectl apply -f app-deployment.yaml
+Verify that the application pods are running.
+kubectl get pods
+Step 2: Update the Application Image
+Create a new version of the application by modifying the "app-deployment.yaml" file and changing
+the image tag to a newer version.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: my-app
+spec:
+ replicas: 2
+43
+ selector:
+ matchLabels:
+ app: my-app
+ template:
+ metadata:
+ labels:
+ app: my-app
+ spec:
+ containers:
+ - name: my-app-container
+ image: nginx:1.21.1 # Newer version of the image
+ ports:
+ - containerPort: 80
+Apply the updated YAML manifest to update the application.
+kubectl apply -f app-deployment.yaml
+Verify that the new version of the application pods is running.
+kubectl get pods
+Step 3: Verify Immutability Principle
+Check the details of the deployment to observe that the "RollingUpdate" strategy was used to
+update the application.
+kubectl describe deployment my-app
+Observe that Kubernetes followed the immutability principle during the update process:
+New pods with the updated image were created first.
+The old pods with the previous image were not deleted until the new pods were ready and running.
+This ensures that the application maintains availability during the update process.
+Step 4: Rollback the Application (Optional)
+44
+If you want to roll back the application to the previous version, modify the "app-deployment.yaml"
+file to use the older image tag and apply the update.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: my-app
+spec:
+ replicas: 2
+ selector:
+ matchLabels:
+ app: my-app
+ template:
+ metadata:
+ labels:
+ app: my-app
+ spec:
+ containers:
+ - name: my-app-container
+ image: nginx:1.20.0 # Previous version of the image
+ ports:
+ - containerPort: 80
+Apply the updated YAML manifest to roll back the application.
+kubectl apply -f app-deployment.yaml
+Verify that the application rolls back to the previous version.
+kubectl get pods
+Relevant Demonstrative Video LINK.
+https://www.youtube.com/watch?v=mkGicK2CTas
+45
+Other Resource materials or Web Links.
+https://kubernetes.io/
+https://kubernetes.io/docs/tasks/job/job-with-pod-to-pod-communication/
+Questions to be asked for Viva Voce of Experiment 3.3:
+Q1.Name the initial namespaces from which Kubernetes starts?
+Q2.What is the Kubernetes controller manager?
+Q3.What are the types of controller managers?
+Q4.What are the different services within Kubernetes?
+Q5.Write the difference between replication controllers and replica sets. 

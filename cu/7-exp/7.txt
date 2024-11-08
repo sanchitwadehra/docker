@@ -1,0 +1,305 @@
+EXPERIMENT 7
+Experiment 2.3: To Setup
+i. Container to WWW Communication,
+ii. Container to Local Host Machine Communication,
+iii. Container to Container Communication,
+iv. Creating a Container & Communicating to the Web (WWW),
+v. Container to Host Communication Work,
+vi. Container to Container Communication using Docker Desktop.
+Outcome of the Experiment
+• Set up a Docker container that can communicate with the outside world (WWW) and test
+its connectivity by accessing a website.
+• Enable communication between a Docker container and the host machine, allowing the
+container to access services running on the host.
+• Enable communication between two Docker containers running on the same host,
+allowing them to interact with each other.
+• Create a Docker container running a simple web server and communicate with it through
+your web browser.
+• Enable communication between two Docker containers running on the same host.
+Procedure
+i. Procedure for the Container to WWW Communication
+Step 1: Pull an Nginx image from Docker Hub (a popular web server) to create a web server
+container:
+Open your terminal or command prompt.
+Step 2: Pull the Nginx image:
+docker pull nginx
+Step 3: Create a Docker container using the Nginx image:
+CO4 Implement Docker Communication, Dockerizing applications and Services
+19
+docker run -d --name my_web_app -p 80:80 nginx
+Usage:
+-d: Run the container in detached mode.
+--name my_web_app: Assign a name (my_web_app) to the container for easy identification.
+-p 80:80: Map port 80 of the container to port 80 of the host machine, allowing HTTP traffic to
+flow between the container and the host.
+nginx: The image to use for creating the container.
+Step 4: Verify that the container is running:
+docker ps
+You should see the "my_web_app" container listed among the running containers.
+Step 5: Access the web server running inside the container:
+Open your web browser and enter http://localhost in the address bar.
+If you see the default Nginx welcome page, it means the communication between the container
+and the WWW is successful.
+Step 6: Clean up (optional):
+If you want to stop and remove the container after testing, run the following commands:
+docker stop my_web_app
+docker rm my_web_app
+This procedure demonstrates how to set up a simple web server container using Nginx and
+communicate with the WWW through Docker Desktop.
+ii. Procedure for Container to Local Host Machine Communication:
+Step 1: Identify the service running on the host machine that you want to communicate with from
+the container. For example, let's assume you have a web server (e.g., Apache or Nginx) running
+on the host.
+Step 2: Determine the IP address of the host machine:
+On Linux/macOS, open a terminal and run the command:
+ifconfig
+20
+On Windows, open a command prompt and run the command:
+ipconfig
+Look for the IP address associated with the network interface you are using. Make note of this IP
+address, as it will be used in the next steps.
+Step 3: Create a Docker container and configure it to communicate with the host machine:
+Open your terminal or command prompt and run the following command:
+docker run -d --name my_local_app --add-host host_machine:<host_ip_address> nginx
+Replace <host_ip_address> with the actual IP address of the host machine obtained in Step 2.
+Explanation:
+docker run: This command creates and starts a new Docker container.
+-d: Runs the container in detached mode, allowing it to run in the background.
+--name my_local_app: Assigns a name ("my_local_app") to the container for easy identification.
+--add-host host_machine:<host_ip_address>: Adds an entry to the container's /etc/hosts file,
+mapping the hostname "host_machine" to the IP address of the host machine.
+nginx: The Docker image to use for creating the container. In this example, we're using the Nginx
+image.
+Step 4: Verify that the container is running:
+docker ps
+You should see the "my_local_app" container listed among the running containers.
+Step 5: Test the container's communication with the host machine:
+Run the following command to access a service (e.g., a web server) running on the host machine
+from within the container:
+docker exec my_local_app curl http://host_machine
+Replace host_machine with the hostname you specified in the --add-host flag in Step 3.
+Explanation:
+docker exec: This command runs a command inside a running container.
+21
+curl http://host_machine: This command is executed within the "my_local_app" container, using
+the curl utility to send an HTTP request to the specified hostname. It should retrieve the response
+from the web server running on the host machine.
+If the command returns the expected response from the web server or the service running on the
+host machine, it means the container can communicate with the host successfully.
+Step 6: Clean up (optional):
+If you want to stop and remove the container after testing, run the following commands:
+docker stop my_local_app
+docker rm my_local_app
+This procedure demonstrates how to establish communication between a Docker container and the
+host machine using Docker Desktop. By mapping the host's IP address to a hostname within the
+container's /etc/hosts file, you can access services running on the host as if they were running
+within the container itself. This allows for seamless integration and interaction between
+containerized applications and the host environment.
+iii. Procedure for Container-to-Container Communication
+Step 1: Create two Docker containers that need to communicate with each other:
+Open your terminal or command prompt.
+Step 2: Run the first container:
+docker run -d --name container1 nginx
+Explanation:
+docker run: This command creates and starts a new Docker container.
+-d: Runs the container in detached mode, allowing it to run in the background.
+--name container1: Assigns a name ("container1") to the first container for easy identification.
+nginx: The Docker image to use for creating the first container. In this example, we're using the
+Nginx image.
+Step 3: Run the second container:
+docker run -d --name container2 nginx
+Explanation:
+22
+--name container2: Assigns a name ("container2") to the second container for easy identification.
+nginx: The Docker image to use for creating the second container. In this example, we're using the
+Nginx image.
+Step 4: Verify that both containers are running:
+docker ps
+You should see "container1" and "container2" listed among the running containers.
+Step 5: Create a user-defined bridge network:
+docker network create my_network
+Explanation:
+By default, Docker provides a bridge network called "bridge" that allows containers to
+communicate with each other. However, for better control and isolation, we will create a userdefined bridge network named "my_network."
+Step 6: Attach both containers to the user-defined network:
+docker network connect my_network container1
+docker network connect my_network container2
+Explanation:
+By connecting both containers to the "my_network" bridge network, they can now communicate
+with each other.
+Step 7: Verify that both containers are connected to the same network:
+docker network inspect my_network
+You should see both "container1" and "container2" listed under the "Containers" section of the
+network details.
+Step 8: Test the communication between the containers:
+Run the following command inside "container1" to ping "container2":
+docker exec container1 ping container2
+If the communication is successful, you should see ping responses from "container2."
+23
+Explanation:
+docker exec: This command runs a command inside a running container.
+ping container2: The "container1" is pinging "container2," using the container name as the
+hostname. Docker automatically resolves the container name to its IP address, allowing seamless
+communication.
+Step 9: Clean up (optional):
+If you want to stop and remove the containers and the user-defined network after testing, run the
+following commands:
+docker stop container1 container2
+docker rm container1 container2
+docker network rm my_network
+This procedure demonstrates how to set up communication between two Docker containers using
+Docker Desktop. By connecting both containers to a user-defined bridge network, you can enable
+them to interact with each other through their respective container names as hostnames. This type
+of communication is valuable when building complex applications that consist of multiple
+interconnected containers.
+iv. Procedure for Creating a Container & Communicating to the Web (WWW)
+Step 1: Pull an Nginx image from Docker Hub (a popular web server) to create a web server
+container:
+Open your terminal or command prompt.
+Step 2: Pull the Nginx image:
+docker pull nginx
+Step 3: Create a Docker container using the Nginx image:
+docker run -d --name my_web_app -p 80:80 nginx
+Explanation:
+docker run: This command creates and starts a new Docker container.
+-d: Runs the container in detached mode, allowing it to run in the background.
+--name my_web_app: Assigns a name ("my_web_app") to the container for easy identification.
+24
+-p 80:80: Maps port 80 of the container to port 80 of the host machine, allowing HTTP traffic to
+flow between the container and the host.
+nginx: The Docker image to use for creating the container.
+Step 4: Verify that the container is running:
+docker ps
+You should see the "my_web_app" container listed among the running containers.
+Step 5: Access the web server running inside the container:
+Open your web browser and enter http://localhost in the address bar.
+Explanation:
+When you access http://localhost in your web browser, the request is sent to port 80 of the host
+machine. Since we mapped port 80 of the container to port 80 of the host (Step 3), the request is
+forwarded to the web server running inside the "my_web_app" container.
+Step 6: View the web server's response:
+If everything is set up correctly, you should see the default Nginx welcome page in your web
+browser.
+Step 7: Stop and remove the container (optional):
+If you want to stop and remove the container after testing, run the following commands:
+docker stop my_web_app
+docker rm my_web_app
+This procedure demonstrates how to create a Docker container running a web server using Nginx
+and communicate with it through your web browser. By mapping the container's port 80 to the
+host's port 80, you can access the web server running inside the container as if it were running
+directly on your host machine. This approach is useful for developing and testing web applications
+locally before deploying them to a production environment.
+v. Procedure for Container to Host Communication Work:
+Step 1: Identify the service running on the host machine that you want to communicate with from
+the container. Let's assume you have a web server (e.g., Apache or Nginx) running on port 8080
+of the host machine.
+Step 2: Create a Docker container and configure it to communicate with the host service:
+docker run -d --name my_container -p 8080:80 nginx
+25
+Explanation:
+docker run: This command creates and starts a new Docker container.
+-d: Runs the container in detached mode, allowing it to run in the background.
+--name my_container: Assigns a name ("my_container") to the container for easy identification.
+-p 8080:80: Maps port 8080 of the host machine to port 80 of the container, allowing
+communication from the host to the container.
+nginx: The Docker image to use for creating the container. In this example, we're using the Nginx
+image.
+Step 3: Verify that the container is running:
+docker ps
+You should see the "my_container" listed among the running containers.
+Step 4: Access the service running on the host from the container:
+Inside the container, you can now access the web server running on the host machine using the
+host IP address and the mapped port (8080).
+To find the IP address of the host, you can use the following command:
+ifconfig # Linux/macOS
+ipconfig # Windows
+Locate the IP address associated with the network interface you are using, and make note of it.
+Step 5: Test the communication from the container to the host service:
+Open a terminal inside the container:
+docker exec -it my_container /bin/bash
+Now, you are inside the container's shell. You can use tools like curl or wget to access the web
+server on the host:
+curl http://<host_ip_address>:8080
+Replace <host_ip_address> with the actual IP address of the host machine obtained in Step 4.
+You should see the response from the web server running on the host.
+Explanation:
+docker exec: This command allows you to run a command inside a running container.
+26
+-it: Allocates a pseudo-TTY and connects it to the container's standard input, enabling interactive
+shell access.
+/bin/bash: The command to run inside the container, in this case, we are using the bash shell.
+Step 6: Clean up (optional):
+If you want to stop and remove the container after testing, run the following commands:
+docker stop my_container
+docker rm my_container
+This procedure demonstrates how to set up communication from a Docker container to a service
+running on the host machine. By mapping a port from the host to the container during container
+creation, you can access services on the host from within the container. This enables seamless
+integration between containerized applications and services running on the host.
+vi. Procedure for Container-to-Container Communication
+Step 1: Create two Docker containers that need to communicate with each other:
+Open your terminal or command prompt.
+Step 2: Run the first container:
+docker run -d --name container1 nginx
+Explanation:
+docker run: This command creates and starts a new Docker container.
+-d: Runs the container in detached mode, allowing it to run in the background.
+--name container1: Assigns a name ("container1") to the first container for easy identification.
+nginx: The Docker image to use for creating the first container. In this example, we're using the
+Nginx image.
+Step 3: Run the second container:
+docker run -d --name container2 nginx
+Explanation:
+--name container2: Assigns a name ("container2") to the second container for easy identification.
+nginx: The Docker image to use for creating the second container. In this example, we're using the
+Nginx image.
+27
+Step 4: Verify that both containers are running:
+docker ps
+You should see "container1" and "container2" listed among the running containers.
+Step 5: Create a user-defined bridge network:
+docker network create my_network
+Explanation:
+By default, Docker provides a bridge network called "bridge" that allows containers to
+communicate with each other. However, for better control and isolation, we will create a userdefined bridge network named "my_network."
+Step 6: Attach both containers to the user-defined network:
+docker network connect my_network container1
+docker network connect my_network container2
+Explanation:
+By connecting both containers to the "my_network" bridge network, they can now communicate
+with each other.
+Step 7: Verify that both containers are connected to the same network:
+docker network inspect my_network
+You should see both "container1" and "container2" listed under the "Containers" section of the
+network details.
+Step 8: Test the communication between the containers:
+Run the following command inside "container1" to ping "container2":
+docker exec container1 ping container2
+If the communication is successful, you should see ping responses from "container2."
+Explanation:
+docker exec: This command runs a command inside a running container.
+ping container2: The "container1" is pinging "container2," using the container name as the
+hostname. Docker automatically resolves the container name to its IP address, allowing seamless
+communication.
+28
+Step 9: Clean up (optional):
+If you want to stop and remove the containers and the user-defined network after testing, run the
+following commands:
+docker stop container1 container2
+docker rm container1 container2
+docker network rm my_network
+This procedure demonstrates how to set up communication between two Docker containers using
+Docker Desktop. By connecting both containers to a user-defined bridge network, you can enable
+them to interact with each other. This type of communication is valuable when building complex
+applications that consist of multiple interconnected containers.
+Relevant Demonstrative Video LINK.
+https://www.youtube.com/watch?v=OU6xOM0SE4o&t=4s
+Other Resource materials or Web Links.
+https://docs.docker.com/network/network-tutorial-standalone/
+Questions to be asked for Viva Voce of Experiment 2.3:
+Q1. What are the various states that a Docker container can be in at any given point in time?
+Q2. What is the preferred way of removing containers - ‘docker rm -f’ or ‘docker stop’ then followed
+by a ‘docker rm’?
+Q3. Difference between Docker Image and container?
+Q4. Which data structure closely resembles a docker image?
+Q5.Can you remove a paused container from Docker?

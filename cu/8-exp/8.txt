@@ -1,0 +1,134 @@
+EXPERIMENT 8
+Experiment 3.1: To perform Kubernetes architecture, building blocks and container
+orchestration.
+CO2 Understand the Docker Container and various basic commands on images
+CO5 Explore the Kubernetes and Container Orchestration with the concept of microservices
+Objective of the Experiment:
+• Exploring the key components of the Kubernetes architecture, such as the master node and
+worker nodes.
+• Understanding the role of each component, such as the API server, controller manager,
+scheduler, and etcd.
+• Examining the communication and interaction between the master node and worker nodes.
+Procedure:
+2. Kubernetes Architecture and building blocks
+Install Docker Desktop: If you haven't already, install Docker Desktop for Windows, which
+includes the necessary components to run containers.
+Install kubectl: Download and install the Kubernetes command-line tool, kubectl, to interact with
+the Kubernetes cluster.
+Install Minikube:
+Download Minikube: Go to the Minikube GitHub releases page
+(https://github.com/kubernetes/minikube/releases) and download the latest Minikube binary for
+Windows.
+Add Minikube to PATH: Extract the downloaded binary and add the folder containing
+"minikube.exe" to your system PATH environment variable.
+Start the Minikube Cluster:
+Open a command prompt or PowerShell window with administrator privileges.
+Start Minikube: Run the following command to start the Minikube cluster:
+minikube start --driver=hyperv
+Minikube will create a single-node Kubernetes cluster using the Hyper-V driver.
+30
+Verify the Cluster:
+Check Cluster Status: Run the following command to ensure that the cluster is running:
+kubectl cluster-info
+Explore Kubernetes Building Blocks:
+Pods: Create a sample Pod using a YAML manifest. For example:
+apiVersion: v1
+kind: Pod
+metadata:
+ name: my-pod
+spec:
+ containers:
+ - name: my-container
+ image: nginx:latest
+Apply the YAML manifest using the following command:
+bash
+Copy code
+kubectl apply -f path/to/your/pod.yaml
+ReplicaSets: Create a ReplicaSet to manage multiple replicas of your Pod. Observe how the
+ReplicaSet maintains the desired number of replicas.
+Deployments: Create a Deployment to manage your ReplicaSet and enable rolling updates and
+rollbacks.
+Services: Create a Service to expose your Deployment and allow external access.
+Perform Container Orchestration Experiments:
+Scaling: Use kubectl to scale the number of replicas in your Deployment and observe how
+Kubernetes adjusts the desired number of pods.
+Rolling Updates: Perform a rolling update on your Deployment by updating the container image
+or configuration.
+Rollbacks: Perform a rollback to a previous version of your Deployment in case of issues.
+3. Orchestration
+31
+To perform container orchestration experiments in Kubernetes, you can focus on scaling, rolling
+updates, and rollbacks. Here's a detailed guide on how to perform these experiments:
+Scaling:
+Deploy a sample application using a Deployment object in Kubernetes. For example, you can
+deploy an Nginx web server with two replicas:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: my-nginx
+spec:
+ replicas: 2
+ selector:
+ matchLabels:
+ app: nginx
+ template:
+ metadata:
+ labels:
+ app: nginx
+ spec:
+ containers:
+ - name: nginx
+ image: nginx:latest
+Apply the YAML manifest using the kubectl apply -f deployment.yaml command.
+Observe the creation of two replicas of the Nginx deployment using kubectl get pods or other
+relevant commands.
+Perform scaling experiments by modifying the replicas field in the Deployment manifest and
+reapplying it using kubectl apply -f deployment.yaml. Observe how Kubernetes automatically
+adjusts the number of replicas to match the desired scale.
+Rolling Updates:
+32
+Modify the container image or other configuration of your Deployment to simulate a rolling
+update. For example, update the Nginx version or change environment variables.
+Use kubectl apply -f deployment.yaml to apply the updated manifest.
+Monitor the rolling update progress using kubectl rollout status deployment/my-nginx.
+Observe how Kubernetes gradually replaces the old pods with the new ones, ensuring a smooth
+transition with minimal downtime.
+Rollbacks:
+Introduce a problem or issue in your updated Deployment, such as a misconfiguration or
+incompatible image.
+Rollback the deployment to the previous version by running kubectl rollout undo deployment/mynginx.
+Monitor the rollback progress using kubectl rollout status deployment/my-nginx.
+Observe how Kubernetes reverts the deployment to the previous stable state, mitigating the issue.
+Load Balancing:
+Create a Service object to expose your Deployment to external traffic. For example, create a
+NodePort service:
+apiVersion: v1
+kind: Service
+metadata:
+ name: my-nginx-service
+spec:
+ type: NodePort
+ selector:
+ app: nginx
+ ports:
+ - protocol: TCP
+ port: 80
+ targetPort: 80
+33
+Apply the YAML manifest using kubectl apply -f service.yaml.
+Access your Nginx service using the NodePort assigned by Kubernetes. Run kubectl get services
+to find the NodePort, and access the service using <node-ip>:<node-port> in a web browser.
+Experiment with scaling your Deployment and observe how the service load balances traffic across
+the replicated pods.
+By performing these container orchestration experiments, you'll gain hands-on experience with
+scaling, rolling updates, rollbacks, and load balancing in Kubernetes.
+Relevant Demonstrative Video LINK.
+https://www.youtube.com/watch?v=5iy5jAhXyKY
+Other Resource materials or Web Links.
+https://thenewstack.io/containers-container-orchestration/
+https://www.ibm.com/cloud/blog/kubernetes-clusters-architecture-for-rapid-controlled-cloudapp-delivery
+Questions to be asked for Viva Voce of Experiment 3.1:
+Q1. What is Kubernetes?
+Q2. What is orchestration when it comes to software and DevOps?
+Q3. How are Kubernetes and Docker related?
+Q4. What are the main differences between the Docker Swarm and Kubernetes?

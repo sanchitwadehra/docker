@@ -1,0 +1,75 @@
+EXPERIMENT 6
+Experiment 2.2: To run Node.js application using Docker and manage the Docker volume.
+Outcomes of the Experiment
+• To Create a Docker image that runs a Node.js application using nodemon.
+• To work with Docker volumes and bind mounts to provide persistent storage for the Node.js
+application running inside the container.
+• To manage Docker volumes using various Docker CLI commands such as listing volumes,
+inspecting specific volumes, and removing volumes.
+• To use the COPY instruction in a Dockerfile to copy files from the host machine to the container.
+Procedure:
+To perform the mentioned tasks and adjustments, let's break them down one by one:
+A NodeJS-specific Adjustment: Using Nodemon in a Container:
+Start by creating a new directory for your Node.js project.
+In this directory, create a Dockerfile to define the Docker image configuration. The Dockerfile should be
+placed in the root of your project.
+Use a base Node.js image in the Dockerfile, such as node:14.
+Install nodemon globally by adding the following line in your Dockerfile:
+RUN npm install -g nodemon
+Set the working directory in the Dockerfile using:
+WORKDIR /app
+Copy the package.json and package-lock.json files into the container using:
+COPY package*.json ./
+Run npm install to install the dependencies:
+RUN npm install
+Copy the rest of your application files into the container using:
+Set the startup command to use nodemon:
+CMD ["nodemon", "app.js"]
+CO3 Understand Docker Volumes and Management Manipulation
+16
+Build the Docker image by running the following command from the project's root directory:
+docker build -t my-node-app .
+Run the container using the created image:
+docker run -p 3000:3000 -v $(pwd):/app my-node-app
+This will start your Node.js application using nodemon inside the container, allowing automatic restarts
+on file changes.
+Volumes & Bind Mounts:
+To use volumes and bind mounts, you can modify the docker run command mentioned above.
+Create a directory on your host machine where you want to store persistent data. Let's assume the path is
+/path/to/host/volume.
+Modify the docker run command to include a bind mount:
+docker run -p 3000:3000 -v /path/to/host/volume:/app my-node-app
+This command will mount the /path/to/host/volume directory on your host machine to the /app directory
+inside the container. Any changes made in the container will be reflected in the host directory, providing
+persistent storage.
+Read-Only Volumes:
+To create a read-only volume, modify the docker run command as follows:
+docker run -p 3000:3000 -v /path/to/host/volume:/app:ro my-node-app
+By adding :ro at the end of the volume specification, you make it read-only. This prevents any
+modifications to the volume from inside the container.
+Managing Docker Volumes:
+To manage Docker volumes, you can use various Docker CLI commands:
+To list all volumes on your system:
+docker volume ls
+To inspect a specific volume:
+docker volume inspect <volume_name>
+To remove a volume:
+docker volume rm <volume_name>
+Working with COPY, dockerignore, and .env Files:
+In your Dockerfile, the COPY instruction copies files from the host machine to the container.
+17
+Create a .dockerignore file in the same directory as your Dockerfile. In this file, list the files and
+directories you want to exclude from being copied into the container.
+Relevant Demonstrative Video LINK.
+https://www.youtube.com/watch?v=PsWeSg38XFY
+Other Resource materials or Web Links.
+• Docker Extended Support Announcement: https://www.docker.com/blog/extending-support-cycledocker-community-edition/
+Next up, we discussed the following open source projects:
+• Moby Project: https://mobyproject.org
+• Runc: https://github.com/opencontainers/runc
+Questions to be asked for Viva Voce of Experiment 2.2:
+Q1. How many containers can run per host?
+Q2.Is there a possibility to include a specific code with COPY/ADD or a volume?
+Q3. Will cloud automation overtake containerization any sooner?
+Q4.Is there a way to identify the status of a Docker container?
+Q5. What are the differences between the ‘docker run’ and the ‘docker create’?

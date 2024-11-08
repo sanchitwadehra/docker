@@ -1,0 +1,58 @@
+EXPERIMENT 5
+Experiment 2.1: To manage Volumes and Containers for storing and retrieval of data.
+Objective of the Experiment:
+• To focus on understanding and working with Docker volumes.
+• To create and manage volumes
+• Learn to create a container that uses a volume to store and retrieve data.
+Procedure:
+To perform the "Introducing Volumes" experiment in Docker Desktop, follow these steps:
+Launch Docker Desktop: Open Docker Desktop once it is installed. Ensure that the Docker daemon is
+running and the Docker CLI (Command Line Interface) is accessible.
+Create a Volume: Open a terminal or command prompt and use the following command to create a
+Docker volume:
+docker volume create myvolume
+This command will create a new volume named "myvolume".
+Run a Container with Volume: Now, you can run a container that uses the created volume. Choose an
+appropriate Docker image for your experiment (e.g., an image with a web server, database, etc.). Use the
+following command to run a container with the volume attached:
+docker run -d -v myvolume:/path/to/mount <image_name>
+Replace <image_name> with the name of the Docker image you want to use. The -v option specifies the
+volume to attach, and /path/to/mount is the path within the container where the volume will be mounted.
+CO2 Understand the Docker Container and various basic commands on images
+CO3 Understand Docker Volumes and Management Manipulation
+14
+Test Volume Usage: Once the container is running, you can interact with it to store and retrieve data from
+the volume. This could involve writing files, storing database data, or any other data-related tasks specific
+to the container you chose.
+Inspect Volume: You can inspect the volume to view its details, such as the mount point on the host
+machine. Use the following command to inspect the volume:
+docker volume inspect myvolume
+Cleanup: After completing the experiment, you can stop and remove the container using the container's
+ID or name. Additionally, you can remove the volume using the following command:
+docker volume rm myvolume
+This command will remove the volume named "myvolume".
+Relevant Demonstrative Video LINK.
+https://www.youtube.com/watch?v=r_LgmqejAkA
+Other Resource materials or Web Links.
+https://docs.docker.com/desktop/use-desktop/
+Questions to be asked for Viva Voce of Experiment 2.1:
+Q1.Can I use JSON instead of YAML for my compose file in Docker?
+Q2. How to stop and restart the Docker container?
+Q3. How far do Docker containers scale?
+Q4. What, in your opinion, is the most exciting potential use for Docker?
+Q5. What’s the difference between up, run, and start?
+15
+EXPERIMENT 6
+Experiment 2.2: To run Node.js application using Docker and manage the Docker volume.
+Outcomes of the Experiment
+• To Create a Docker image that runs a Node.js application using nodemon.
+• To work with Docker volumes and bind mounts to provide persistent storage for the Node.js
+application running inside the container.
+• To manage Docker volumes using various Docker CLI commands such as listing volumes,
+inspecting specific volumes, and removing volumes.
+• To use the COPY instruction in a Dockerfile to copy files from the host machine to the container.
+Procedure:
+To perform the mentioned tasks and adjustments, let's break them down one by one:
+A NodeJS-specific Adjustment: Using Nodemon in a Container:
+Start by creating a new directory for your Node.js project.
+In this directory, create a Dockerfile to define the Dock
