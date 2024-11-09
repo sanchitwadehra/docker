@@ -1,0 +1,71 @@
+What is Kubernetes?
+Kubernetes (often abbreviated as K8s) is an open-source platform that automates the deployment, scaling, and management of containerized applications. It's like the manager of all your containers (think of them as little isolated environments where your applications run). Kubernetes helps you run and manage applications without worrying about the underlying infrastructure.
+
+What Are Pods, ReplicaSets, Deployments, and Services?
+Before jumping into load balancing and scaling, it's important to understand a few key concepts in Kubernetes:
+
+Pod:
+
+A Pod is the smallest unit in Kubernetes. It’s like a container or a group of containers that run on the same machine.
+Each Pod can contain one or more containers that share the same resources like networking and storage.
+Example: If you’re running a website, your Pod might contain a container with the web server (like Nginx or Apache) and another container with your application.
+ReplicaSet:
+
+A ReplicaSet ensures that a specified number of replicas (identical copies) of a Pod are running at any given time. If one Pod crashes, the ReplicaSet ensures a new Pod is started automatically to replace it.
+It’s like making sure you always have the same number of copies of a service running (for high availability and reliability).
+Deployment:
+
+A Deployment is a higher-level abstraction that manages ReplicaSets and Pods.
+With Deployments, you can easily manage updates to your Pods and ReplicaSets. For example, you can use a Deployment to roll out a new version of your application.
+Service:
+
+A Service in Kubernetes is an abstraction layer that allows you to expose a set of Pods as a network service.
+If you have multiple Pods running the same application, the Service helps route traffic to the correct Pods, even if the Pods are moving around or scaling up/down.
+What Are We Doing in Step 5?
+Expose Deployment via NodePort:
+
+The Service we are creating is of type NodePort. This means that Kubernetes will expose your application to the outside world on a specific port.
+NodePort allows external traffic to reach your application running in your Kubernetes cluster. So, if someone wants to access your app, they just need the IP address and port.
+In simpler terms, we're creating an entry point (like a door) to access your application running in Kubernetes.
+Scaling and Load Balancing:
+
+Scaling means increasing or decreasing the number of Pods running your application. This is useful if you expect more traffic (you can increase the number of Pods) or if there’s less demand (you can decrease the number of Pods).
+Kubernetes can automatically load balance the traffic among multiple Pods. This means that when you have more Pods, Kubernetes will distribute the incoming traffic across all Pods so that no single Pod gets overwhelmed.
+For example, imagine you have 3 replicas of your app running. Kubernetes will balance the load, ensuring each Pod handles part of the traffic.
+Example: Making It All Work
+Let’s say you're running a simple web app in Kubernetes, and you want to scale it and expose it externally. Here’s how that works:
+
+Creating the Pod (or Pods):
+
+You define a YAML file that tells Kubernetes to create a Pod with a container running your web app. This is where the app will run.
+Creating the ReplicaSet:
+
+Now, you want to make sure there are multiple copies (replicas) of your Pod running for reliability and load balancing. So, you create a ReplicaSet that makes sure a certain number of Pods are running at all times.
+Creating the Deployment:
+
+A Deployment manages the ReplicaSet and ensures that if something goes wrong (for example, one of the Pods crashes), it will automatically replace it with a new one.
+Creating the Service:
+
+Now, to expose your app to the outside world, you create a Service. The NodePort type will expose the service to a port, and you can access your app by visiting http://<your-node-ip>:<node-port>.
+Scaling the Application:
+
+If you need more capacity, you scale the Deployment, which will automatically scale the ReplicaSet and add more Pods. Kubernetes will handle balancing the incoming traffic across these Pods.
+What’s Happening During Load Balancing and Scaling?
+Expose via NodePort:
+
+When you define the Service with type: NodePort, Kubernetes will assign a specific port on the node to route external traffic into the Pods.
+This allows you to reach your application from outside the Kubernetes cluster.
+Scaling:
+
+If you need to handle more traffic, you can scale the Deployment by increasing the number of replicas (more Pods). Kubernetes will create new Pods automatically to meet the desired count.
+Kubernetes ensures that traffic is distributed evenly across all the Pods. So, if you have 3 Pods running, Kubernetes will try to send about one-third of the incoming requests to each Pod.
+Load Balancing:
+
+As more replicas (Pods) are added, Kubernetes will automatically load balance the requests, meaning each Pod gets a fair share of traffic.
+If one Pod crashes, Kubernetes will replace it with a new one, ensuring that your app remains available at all times.
+Summary
+Pods are the smallest unit where your app runs.
+ReplicaSets make sure there are enough copies of your Pods running for redundancy.
+Deployments allow you to manage the rollout and scaling of your app.
+Services (like NodePort) expose your app to the outside world.
+Scaling increases/decreases the number of Pods, and Load Balancing distributes the traffic across these Pods.
