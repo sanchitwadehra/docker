@@ -1,0 +1,71 @@
+AFTER BUILDING THE image
+
+BIND MOUNT APPROACH :- 
+
+LINK WORKING DIRECTORY TO LINK ANY UPDATE TO SHOW UP IN CONTAINER HENCE NODEMON WOULD RESTART
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/6-exp/node-docker-app (main)
+$ docker run -p 3000:3000 -v $(pwd):/app my-node-app
+[nodemon] 3.1.7
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node app.js`
+Server running on port 3000
+
+OR BIND MOUNT A EXTERNAL DIRECTORY
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/6-exp/node-docker-app (main)
+$ docker run -p 3000:3000 -v ~/Documents/GitHub/docker/cu/6-exp/node-app-volume:/app my-node-app
+[nodemon] 3.1.7
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node app.js`
+Server running on port 3000
+
+
+
+
+VOLUME LINKING APPROACH :-
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/6-exp/node-docker-app (main)
+$ docker volume create my-docker-volume
+my-docker-volume
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/6-exp/node-docker-app (main)
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     my-docker-volume
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/6-exp/node-docker-app (main)
+$ docker run -p 3000:3000 -v my-docker-volume:/app my-node-app
+[nodemon] 3.1.7
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node app.js`
+Server running on port 3000
+
+IN ANOTHER TERMINAL
+
+C:\Users\sanch>docker volume ls
+DRIVER    VOLUME NAME
+local     my-docker-volume
+
+C:\Users\sanch>docker volume inspect my-docker-volume
+[
+    {
+        "CreatedAt": "2024-11-09T02:17:33Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/my-docker-volume/_data",
+        "Name": "my-docker-volume",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
+
+AFTER STOPPING THE RUNNING CONTAINER
+
+C:\Users\sanch>docker volume rm my-docker-volume
+my-docker-volume
