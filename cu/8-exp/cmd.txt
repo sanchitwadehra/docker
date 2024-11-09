@@ -1,0 +1,250 @@
+Microsoft Windows [Version 10.0.19045.5011]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\sanch>minikube start --driver=docker
+* minikube v1.34.0 on Microsoft Windows 10 Home Single Language 10.0.19045.5011 Build 19045.5011
+* Using the docker driver based on user configuration
+* Using Docker Desktop driver with root privileges
+* Starting "minikube" primary control-plane node in "minikube" cluster
+* Pulling base image v0.0.45 ...
+* Creating docker container (CPUs=2, Memory=3500MB) ...
+! Failing to connect to https://registry.k8s.io/ from inside the minikube container
+* To pull new external images, you may need to configure a proxy: https://minikube.sigs.k8s.io/docs/reference/networking/proxy/
+* Preparing Kubernetes v1.31.0 on Docker 27.2.0 ...
+  - Generating certificates and keys ...
+  - Booting up control plane ...
+  - Configuring RBAC rules ...
+* Configuring bridge CNI (Container Networking Interface) ...
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+* Enabled addons: storage-provisioner, default-storageclass
+* Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+C:\Users\sanch>minikube ssh
+docker@minikube:~$ ping google.com
+PING google.com (142.250.194.142) 56(84) bytes of data.
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=1 ttl=63 time=27.5 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=2 ttl=63 time=27.0 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=3 ttl=63 time=16.8 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=4 ttl=63 time=18.5 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=5 ttl=63 time=15.4 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=6 ttl=63 time=14.4 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=7 ttl=63 time=15.9 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=8 ttl=63 time=27.0 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=9 ttl=63 time=17.3 ms
+64 bytes from 142.250.194.142 (142.250.194.142): icmp_seq=10 ttl=63 time=15.8 ms
+^C
+--- google.com ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9005ms
+rtt min/avg/max/mdev = 14.422/19.571/27.502/5.084 ms
+docker@minikube:~$ exit
+logout
+
+C:\Users\sanch>minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+
+C:\Users\sanch>kubectl get nodes
+NAME       STATUS   ROLES           AGE    VERSION
+minikube   Ready    control-plane   107s   v1.31.0
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl cluster-info                                      
+Kubernetes control plane is running at https://127.0.0.1:61565
+CoreDNS is running at https://127.0.0.1:61565/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl apply -f pod.yaml
+pod/my-pod created
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl get pods
+NAME     READY   STATUS              RESTARTS   AGE
+my-pod   0/1     ContainerCreating   0          8s 
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl apply -f replicaset.yaml
+replicaset.apps/my-replicaset created
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl get replicaset
+NAME            DESIRED   CURRENT   READY   AGE
+my-replicaset   3         3         1       9s 
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl get pods
+NAME                  READY   STATUS              RESTARTS  
+ AGE
+my-pod                1/1     Running             0
+ 71s
+my-replicaset-jn6k8   1/1     Running             0
+ 9s
+my-replicaset-lx4wx   0/1     ContainerCreating   0
+ 9s
+my-replicaset-pl2d4   0/1     ContainerCreating   0
+ 9s
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl apply -f deployment.yaml
+deployment.apps/my-nginx created
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl apply -f service.yaml
+service/my-nginx-service created
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl get services
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP  
+ PORT(S)        AGE
+kubernetes         ClusterIP   10.96.0.1       <none>       
+ 443/TCP        7m17s
+my-nginx-service   NodePort    10.110.51.112   <none>       
+ 80:32505/TCP   7s
+
+//Let's scale the deployment to 3 replicas. Modify the replicas field in your deployment.yaml to 3 and reapply it:
+yaml
+Copy code
+spec:
+  replicas: 3
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl apply -f deployment.yaml
+deployment.apps/my-nginx configured
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+my-nginx-c95765fd4-h49sn   1/1     Running   0          2m7smy-nginx-c95765fd4-jw9d4   1/1     Running   0          8s  
+my-nginx-c95765fd4-mnqfc   1/1     Running   0          2m7smy-pod                     1/1     Running   0          4m20s
+my-replicaset-jn6k8        1/1     Running   0          3m18s
+my-replicaset-lx4wx        1/1     Running   0          3m18s
+my-replicaset-pl2d4        1/1     Running   0          3m18s
+
+
+//Perform Rolling Update:
+
+To perform a rolling update, you can change the image version or update environment variables. For example, update the Nginx image version:
+yaml
+Copy code
+containers:
+  - name: nginx
+    image: nginx:latest
+Update the image version to, say, nginx:alpine and reapply:
+bash
+Copy code
+kubectl apply -f deployment.yaml
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl apply -f deployment.yaml
+deployment.apps/my-nginx configured
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl rollout status deployment/my-nginx
+Waiting for deployment "my-nginx" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "my-nginx" rollout to finish: 1 old replicas are pending termination...
+deployment "my-nginx" successfully rolled out
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl rollout undo deployment/my-nginx
+deployment.apps/my-nginx rolled back
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl rollout status deployment/my-nginx
+Waiting for deployment "my-nginx" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "my-nginx" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "my-nginx" rollout to finish: 1 old replicas are pending termination...
+deployment "my-nginx" successfully rolled out
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl get services
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP  
+ PORT(S)        AGE
+kubernetes         ClusterIP   10.96.0.1       <none>       
+ 443/TCP        17m
+my-nginx-service   NodePort    10.110.51.112   <none>       
+ 80:32505/TCP   10m
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl get svc my-nginx-service
+NAME               TYPE       CLUSTER-IP      EXTERNAL-IP   
+PORT(S)        AGE
+my-nginx-service   NodePort   10.110.51.112   <none>        
+80:32505/TCP   14m
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl port-forward svc/my-nginx-service 8080:80
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+Handling connection for 8080
+
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl describe svc my-nginx-service
+Name:                     my-nginx-service
+Namespace:                default
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=nginx
+Type:                     NodePort
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.110.51.112
+IPs:                      10.110.51.112
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  32505/TCP
+Endpoints:                10.244.0.14:80,10.244.0.15:80,10.244.0.16:80 + 3 more...
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl delete deployment my-nginx
+deployment.apps "my-nginx" deleted
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ kubectl delete service my-nginx-service
+service "my-nginx-service" deleted
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ minikube stop
+✋  Stopping node "minikube"  ...
+🛑  Powering off "minikube" via SSH ...
+🛑  1 node stopped.
+
+sanch@Sanchit-Laptop MINGW64 ~/Documents/GitHub/docker/cu/8-exp (main)
+$ minikube delete
+🔥  Deleting "minikube" in docker ...
+🔥  Deleting container "minikube" ...
+🔥  Removing C:\Users\sanch\.minikube\machines\minikube ...
+💀  Removed all traces of the "minikube" cluster.
